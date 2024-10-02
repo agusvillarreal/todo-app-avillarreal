@@ -1,7 +1,12 @@
+import sys
+import os
+sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from authlib.integrations.flask_client import OAuth
+from sqlalchemy.orm import Session
 
 db = SQLAlchemy()
 login_manager = LoginManager()
@@ -56,6 +61,6 @@ def create_app(config_class):
 
     @login_manager.user_loader
     def load_user(user_id):
-        return User.query.get(int(user_id))
+        return db.session.get(User, int(user_id))
 
     return app
