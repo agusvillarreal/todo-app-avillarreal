@@ -45,6 +45,7 @@ def setup_db(app):
         db.drop_all()
 
 def test_create_task(authenticated_client, app):
+    # Backend
     with app.app_context():
         response = authenticated_client.post('/create_task', data={
             'content': 'Test task',
@@ -52,6 +53,7 @@ def test_create_task(authenticated_client, app):
         })
         assert response.status_code == 302  # Redirect after creation
         
+        ## Front
         task = db.session.execute(db.select(Task)).scalar_one_or_none()
         assert task is not None
         assert task.content == '<p>Test task</p>'
